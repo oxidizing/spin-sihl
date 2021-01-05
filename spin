@@ -37,6 +37,12 @@
     (values PostgreSql MariaDb In-memory))
   (default In-memory))
 
+(config example
+  (select
+    (prompt "Do you want a to-do list app as an example?")
+    (values Yes No))
+  (default Yes))
+
 (config admin_ui
   (select
     (prompt "Do you use the built-in admin UI?")
