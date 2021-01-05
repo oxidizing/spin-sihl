@@ -1,4 +1,3 @@
-{%- if app_type == 'Html' or app_type == 'Both' %}
 let site () =
   [ Sihl.Web.Id.middleware
   ; Sihl.Web.Error.site_middleware
@@ -13,8 +12,6 @@ let site () =
   ; Sihl.Web.User.session_middleware ()
   ]
 ;;
-{%- endif %}
-{%- if app_type == 'Json' or app_type == 'Both' %}
 
 let json_api () =
   [ Sihl.Web.Id.middleware
@@ -25,5 +22,3 @@ let json_api () =
   ; Sihl.Web.User.token_middleware ()
   ]
 ;;
-
-{%- endif %}

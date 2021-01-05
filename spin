@@ -2,7 +2,8 @@
 (description "Sihl application")
 
 (config project_name
-  (input (prompt "Project name")))
+  (input (prompt "Project name"))
+  (default "demo"))
 
 (config project_slug
   (input (prompt "Project slug"))
@@ -34,8 +35,8 @@
 (config database
   (select
     (prompt "Which database do yo use?")
-    (values PostgreSql MariaDb In-memory))
-  (default In-memory))
+    (values PostgreSql MariaDb))
+  (default PostgreSql))
 
 (config example
   (select

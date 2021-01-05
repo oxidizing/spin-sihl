@@ -1,7 +1,6 @@
 type status =
   | Active
   | Done
-  | Deleted
 
 type t =
   { id : string

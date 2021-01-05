@@ -4,13 +4,11 @@ let status =
     match m with
     | Active -> Ok "active"
     | Done -> Ok "done"
-    | Deleted -> Ok "deleted"
   in
   let decode m =
     match m with
     | "active" -> Ok Active
     | "done" -> Ok Done
-    | "deleted" -> Ok Deleted
     | value -> Error ("Invalid status read: " ^ value)
   in
   Caqti_type.(custom ~encode ~decode string)
@@ -29,7 +27,7 @@ let todo =
 let find_request =
   Caqti_request.find
     Caqti_type.string
-    Caqti_type.(tup4 string string ptime ptime)
+    todo
     {sql|
         SELECT
           uuid,

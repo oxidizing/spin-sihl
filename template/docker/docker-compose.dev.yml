@@ -1,6 +1,7 @@
-version: '3.1'
+version: "3.1"
 
 services:
+  {-% if database == 'PostgreSql' %}
   postgres:
     image: postgres:12.2
     restart: always
@@ -10,6 +11,19 @@ services:
       POSTGRES_DB: dev
     ports:
       - 5432:5432
+  {-% endif %}
+  {-% if database == 'MariaDb' %}
+  mariadb:
+    image: mariadb:10.1.41-bionic
+    command: --max_allowed_packet=629145600
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: dev
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+  {-% endif %}
 
   adminer:
     image: adminer:4.7.6-standalone

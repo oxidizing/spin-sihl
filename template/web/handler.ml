@@ -18,18 +18,10 @@ let update req =
     Lwt.return @@ Sihl.Web.Flash.set (Some "Failed to update todo description") resp
 ;;
 
-let cancel req =
-  let open Lwt.Syntax in
-  let id = Opium.Router.param req "id" in
-  let* () = Todo.cancel id in
-  let resp = Opium.Response.redirect_to "/site/todos/" in
-  Lwt.return @@ Sihl.Web.Flash.set (Some "Successfully cancelled") resp
-;;
-
 let do_ req =
   let open Lwt.Syntax in
   let id = Opium.Router.param req "id" in
-  let* () = Todo.cancel id in
+  let* () = Todo.do_ id in
   let resp = Opium.Response.redirect_to "/site/todos/" in
   Lwt.return @@ Sihl.Web.Flash.set (Some "Successfully set to done") resp
 ;;
