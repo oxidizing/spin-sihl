@@ -1,3 +1,4 @@
+(* Use these middlewares for your good ole server side rendered forms. *)
 let site () =
   [ Sihl.Web.Id.middleware
   ; Sihl.Web.Error.site_middleware
@@ -13,6 +14,7 @@ let site () =
   ]
 ;;
 
+(* Use these middlewares for JSON APIs. *)
 let json_api () =
   [ Sihl.Web.Id.middleware
   ; Opium.Middleware.logger

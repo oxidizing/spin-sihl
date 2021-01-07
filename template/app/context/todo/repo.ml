@@ -1,3 +1,10 @@
+(* The repository hides dealing with the database.
+
+   It is allowed to know the model and it contains serialization/deserialization
+   of its types. Try to keep the queries small and simple and do some work in      the service. Once you run into performance issues, move code from the service   into the queries. This makes them harder to maintain though.
+
+*)
+
 let status =
   let open Model in
   let encode m =

@@ -1,3 +1,5 @@
+(* The templates and components. *)
+
 open Tyxml.Html
 
 let this_title = title (txt "Welcome to Sihl!")

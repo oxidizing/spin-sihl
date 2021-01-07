@@ -1,3 +1,5 @@
+(* Database migrations. *)
+
 {%- if database == 'PostgreSql' %}
 let create_todos_table =
   Sihl.Migration.create_step

@@ -1,3 +1,10 @@
+(* The service provides functionality to the outside world and is the main
+   entry point to the "todo" context.
+
+   Once a request makes it to the service, we can safely assume that the request   has been validated and authorized. Business rules that can not be placed
+   in the model go here. The service calls models and repositories.
+*)
+
 module Model = Model
 
 let cleaner = Repo.clean
@@ -8,13 +15,6 @@ let create description =
 ;;
 
 let find id = Repo.find id
-
-let update id ~description =
-  let open Lwt.Syntax in
-  let* todo = find id in
-  let updated = Model.{ todo with description } in
-  Repo.update updated
-;;
 
 let do_ id =
   let open Lwt.Syntax in

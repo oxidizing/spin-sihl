@@ -1,3 +1,7 @@
+(* The handlers map responses to HTTP requests.
+
+   Authentication, authorization and input sanitization/validation usually happen here. *)
+
 let list req =
   let open Lwt.Syntax in
   let csrf = Sihl.Web.Csrf.find req in
