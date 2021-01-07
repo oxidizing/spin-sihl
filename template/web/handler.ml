@@ -1,6 +1,7 @@
 (* The handlers map responses to HTTP requests.
 
-   Authentication, authorization and input sanitization/validation usually happen here. *)
+   Authentication, authorization and input sanitization/validation
+   usually happen here. *)
 
 let list req =
   let open Lwt.Syntax in
@@ -9,6 +10,13 @@ let list req =
   let alert = Sihl.Web.Flash.find_alert req in
   let* todos, _ = Todo.search 100 in
   Lwt.return @@ Opium.Response.of_html (Template.page csrf todos alert notice)
+;;
+
+let list_json _ =
+  let open Lwt.Syntax in
+  let* todos, _ = Todo.search 100 in
+  let todos = `List (Caml.List.map Todo.to_yojson todos) in
+  Lwt.return @@ Opium.Response.of_json todos
 ;;
 
 let add req =

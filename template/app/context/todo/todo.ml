@@ -1,13 +1,30 @@
 (* The service provides functionality to the outside world and is the main
    entry point to the "todo" context.
 
-   Once a request makes it to the service, we can safely assume that the request   has been validated and authorized. Business rules that can not be placed
-   in the model go here. The service calls models and repositories.
+   Once a request makes it to the service, we can safely assume that the
+   request has been validated and authorized. Business rules that can
+   not be placed in the model go here. The service calls models and
+   repositories.
 *)
 
 module Model = Model
 
 let cleaner = Repo.clean
+
+let to_yojson todo =
+  let open Model in
+  `Assoc
+    [ "id", `String todo.id
+    ; "description", `String todo.description
+    ; ( "status"
+      , `String
+          (match todo.status with
+          | Active -> "active"
+          | Done -> "done") )
+    ; "created_at", `String (Ptime.to_rfc3339 todo.created_at)
+    ; "updated_at", `String (Ptime.to_rfc3339 todo.updated_at)
+    ]
+;;
 
 let create description =
   let todo = Model.create description in
