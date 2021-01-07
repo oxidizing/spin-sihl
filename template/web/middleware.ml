@@ -3,12 +3,12 @@ let site () =
   ; Sihl.Web.Error.site_middleware
   ; Opium.Middleware.logger
   ; Opium.Middleware.content_length
-  ; Opium.Middleware.head
   ; Opium.Middleware.etag
   ; Sihl.Web.Static.middleware ()
   ; Sihl.Web.Session.middleware ()
   ; Sihl.Web.Form.middleware
   ; Sihl.Web.Csrf.middleware ()
+  ; Sihl.Web.Flash.middleware ()
   ; Sihl.Web.User.session_middleware ()
   ]
 ;;

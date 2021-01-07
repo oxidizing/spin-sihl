@@ -100,5 +100,8 @@
   (commands
     ("make deps" "Download runtime and development dependencies.")
     ("make build" "Build the dependencies and the project.")
-    ("make test" "Starts the test runner."))
+    ("make test" "Starts the test runner.")
+    ("make sihl" "Runs the app executable and lists available sub-commands.")
+    ("make sihl migrate" "Executes database migrations.")
+    ("make sihl start" "Starts the Sihl app"))
   (enabled_if true))

@@ -1,27 +1,32 @@
 let list req =
   let open Lwt.Syntax in
   let csrf = Sihl.Web.Csrf.find req in
+  let notice = Sihl.Web.Flash.find_notice req in
+  let alert = Sihl.Web.Flash.find_alert req in
   let* todos, _ = Todo.search 100 in
-  Lwt.return @@ Opium.Response.of_html (Template.todo_list csrf todos)
+  Lwt.return @@ Opium.Response.of_html (Template.page csrf todos alert notice)
 ;;
 
-let update req =
+let add req =
   let open Lwt.Syntax in
-  let id = Opium.Router.param req "id" in
   match Sihl.Web.Form.find_all req with
   | [ ("description", [ description ]) ] ->
-    let* () = Todo.update id ~description in
-    let resp = Opium.Response.redirect_to "/site/todos/" in
-    Lwt.return @@ Sihl.Web.Flash.set (Some "Successfully updated") resp
+    let* () = Todo.create description in
+    let resp = Opium.Response.redirect_to "/" in
+    Lwt.return @@ Sihl.Web.Flash.set_notice (Some "Successfully updated") resp
   | _ ->
-    let resp = Opium.Response.redirect_to "/site/todos/" in
-    Lwt.return @@ Sihl.Web.Flash.set (Some "Failed to update todo description") resp
+    let resp = Opium.Response.redirect_to "/" in
+    Lwt.return @@ Sihl.Web.Flash.set_alert (Some "Failed to update todo description") resp
 ;;
 
 let do_ req =
   let open Lwt.Syntax in
-  let id = Opium.Router.param req "id" in
-  let* () = Todo.do_ id in
-  let resp = Opium.Response.redirect_to "/site/todos/" in
-  Lwt.return @@ Sihl.Web.Flash.set (Some "Successfully set to done") resp
+  match Sihl.Web.Form.find_all req with
+  | [ ("id", [ id ]) ] ->
+    let* () = Todo.do_ id in
+    let resp = Opium.Response.redirect_to "/" in
+    Lwt.return @@ Sihl.Web.Flash.set_notice (Some "Successfully set to done") resp
+  | _ ->
+    let resp = Opium.Response.redirect_to "/" in
+    Lwt.return @@ Sihl.Web.Flash.set_alert (Some "Failed to set to-do to done") resp
 ;;

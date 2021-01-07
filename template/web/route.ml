@@ -1,13 +1,13 @@
 (* Site routes *)
-let todos = Sihl.Web.Http.get "/todos" Handler.list
-let update = Sihl.Web.Http.post "/todos/:id" Handler.update
-let do_ = Sihl.Web.Http.post "/todos/:id/do" Handler.do_
+let list_todos = Sihl.Web.Http.get "/" Handler.list
+let add_todos = Sihl.Web.Http.post "/add" Handler.add
+let do_todos = Sihl.Web.Http.post "/do" Handler.do_
 
 let site_router =
   Sihl.Web.Http.router
     ~middlewares:(Middleware.site ())
-    ~scope:"/site"
-    [ todos; update; do_ ]
+    ~scope:"/"
+    [ list_todos; add_todos; do_todos ]
 ;;
 
 (* The list of routers that can be passed to the HTTP service *)

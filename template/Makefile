@@ -31,9 +31,9 @@ build: ## Build the project, including non installable libraries and executables
 install: all ## Install the packages on the system
 	opam exec -- dune install --root .
 
-.PHONY: start
-start: all ## Run the produced executable
-	opam exec -- dune exec --root . bin/main.exe $(ARGS)
+.PHONY: sihl
+sihl: all ## Run the produced executable
+	opam exec -- dune exec --root . run/run.exe $(ARGS)
 
 .PHONY: test
 test: ## Run the unit tests

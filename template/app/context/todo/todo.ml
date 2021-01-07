@@ -1,3 +1,5 @@
+module Model = Model
+
 let cleaner = Repo.clean
 
 let create description =
