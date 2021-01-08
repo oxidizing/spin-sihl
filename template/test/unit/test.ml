@@ -8,5 +8,5 @@ let suite = Alcotest.[ "canary test", [ test_case "sanity check" `Quick sanity_c
 
 let () =
   Unix.putenv "SIHL_ENV" "test";
-  Alcotest.(run "unit tests" suite)
+  Alcotest.(run "unit" suite)
 ;;

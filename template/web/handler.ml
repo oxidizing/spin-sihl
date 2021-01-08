@@ -1,4 +1,4 @@
-(* The handlers map responses to HTTP requests.
+(* The handlers map HTTP responses to HTTP requests.
 
    Authentication, authorization and input sanitization/validation
    usually happen here. *)
@@ -23,7 +23,7 @@ let add req =
   let open Lwt.Syntax in
   match Sihl.Web.Form.find_all req with
   | [ ("description", [ description ]) ] ->
-    let* () = Todo.create description in
+    let* _ = Todo.create description in
     let resp = Opium.Response.redirect_to "/" in
     Lwt.return @@ Sihl.Web.Flash.set_notice (Some "Successfully updated") resp
   | _ ->
@@ -35,9 +35,15 @@ let do_ req =
   let open Lwt.Syntax in
   match Sihl.Web.Form.find_all req with
   | [ ("id", [ id ]) ] ->
-    let* () = Todo.do_ id in
-    let resp = Opium.Response.redirect_to "/" in
-    Lwt.return @@ Sihl.Web.Flash.set_notice (Some "Successfully set to done") resp
+    let* todo = Todo.find_opt id in
+    (match todo with
+    | None ->
+      let resp = Opium.Response.redirect_to "/" in
+      Lwt.return @@ Sihl.Web.Flash.set_alert (Some "Todo not found") resp
+    | Some todo ->
+      let* () = Todo.do_ todo in
+      let resp = Opium.Response.redirect_to "/" in
+      Lwt.return @@ Sihl.Web.Flash.set_notice (Some "Successfully set to done") resp)
   | _ ->
     let resp = Opium.Response.redirect_to "/" in
     Lwt.return @@ Sihl.Web.Flash.set_alert (Some "Failed to set to-do to done") resp

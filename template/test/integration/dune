@@ -1,6 +1,6 @@
 (executable
  (name test)
- (libraries sihl alcotest-lwt caqti-driver-postgresql))
+ (libraries sihl todo web database alcotest-lwt {%- if database == 'PostgreSql' %} caqti-driver-postgresql{%- else %} caqti-driver-mariadb{%- endif %}))
 
 (rule
  (alias runtest-all)

@@ -36,19 +36,7 @@
   (select
     (prompt "Which database do yo use?")
     (values PostgreSql MariaDb))
-  (default PostgreSql))
-
-(config example
-  (select
-    (prompt "Do you want a to-do list app as an example?")
-    (values Yes No))
-  (default Yes))
-
-(config admin_ui
-  (select
-    (prompt "Do you use the built-in admin UI?")
-    (values Yes No))
-  (default Yes))
+  (default MariaDb))
 
 (config ci_cd
   (select
@@ -61,10 +49,6 @@
     (prompt "Do you use Docker?")
     (values Yes No))
   (default Yes))
-
-(ignore
-  (files database/*)
-  (enabled_if (eq :database In-memory)))
 
 (ignore
   (files docker/*)

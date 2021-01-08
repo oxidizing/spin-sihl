@@ -31,6 +31,30 @@ let todo =
     custom ~encode ~decode (tup2 string (tup2 string (tup2 status (tup2 ptime ptime)))))
 ;;
 
+{% if database == 'MariaDb' %}
+let find_request =
+  Caqti_request.find
+    Caqti_type.string
+    todo
+    {sql|
+        SELECT
+          LOWER(CONCAT(
+           SUBSTR(HEX(uuid), 1, 8), '-',
+           SUBSTR(HEX(uuid), 9, 4), '-',
+           SUBSTR(HEX(uuid), 13, 4), '-',
+           SUBSTR(HEX(uuid), 17, 4), '-',
+           SUBSTR(HEX(uuid), 21)
+           )),
+          description,
+          status,
+          created_at,
+          updated_at
+        FROM todos
+        WHERE uuid = UNHEX(REPLACE(?, '-', ''))
+        |sql}
+;;
+{% endif %}
+{% if database == 'PostgreSql' %}
 let find_request =
   Caqti_request.find
     Caqti_type.string
@@ -46,6 +70,7 @@ let find_request =
         WHERE uuid = ?::uuid
         |sql}
 ;;
+{% endif %}
 
 let find id =
   Sihl.Database.query (fun connection ->
@@ -65,6 +90,25 @@ let filter_fragment =
           OR todos.status LIKE $1 |sql}
 ;;
 
+{% if database == 'MariaDb' %}
+let search_query =
+  {sql|
+        SELECT
+          LOWER(CONCAT(
+           SUBSTR(HEX(uuid), 1, 8), '-',
+           SUBSTR(HEX(uuid), 9, 4), '-',
+           SUBSTR(HEX(uuid), 13, 4), '-',
+           SUBSTR(HEX(uuid), 17, 4), '-',
+           SUBSTR(HEX(uuid), 21)
+           )),
+          description,
+          status,
+          created_at,
+          updated_at
+        FROM todos |sql}
+;;
+{% endif %}
+{% if database == 'PostgreSql' %}
 let search_query =
   {sql|
         SELECT
@@ -75,6 +119,7 @@ let search_query =
           updated_at
         FROM todos |sql}
 ;;
+{% endif %}
 
 let requests = Sihl.Database.prepare_requests search_query filter_fragment "id" todo
 
@@ -95,6 +140,28 @@ let search sort filter limit =
       Lwt.return (result, amount))
 ;;
 
+{% if database == 'MariaDb' %}
+let insert_request =
+  Caqti_request.exec
+    todo
+    {sql|
+        INSERT INTO todos (
+          uuid,
+          description,
+          status,
+          created_at,
+          updated_at
+        ) VALUES (
+          UNHEX(REPLACE($1, '-', '')),
+          $2,
+          $3,
+          $4,
+          $5
+        )
+        |sql}
+;;
+{% endif %}
+{% if database == 'PostgreSql' %}
 let insert_request =
   Caqti_request.exec
     todo
@@ -114,6 +181,7 @@ let insert_request =
         )
         |sql}
 ;;
+{% endif %}
 
 let insert todo =
   Sihl.Database.query (fun connection ->
@@ -121,6 +189,7 @@ let insert todo =
       Connection.exec insert_request todo |> Lwt.map Sihl.Database.raise_error)
 ;;
 
+{% if database == 'MariaDb' %}
 let update_request =
   Caqti_request.exec
     todo
@@ -131,9 +200,25 @@ let update_request =
           status = $3,
           created_at = $4,
           updated_at = $5
-        WHERE todos.uuid = $1
+        WHERE todos.uuid = UNHEX(REPLACE($1, '-', ''))
         |sql}
 ;;
+{% endif %}
+{% if database == 'PostgreSql' %}
+let update_request =
+  Caqti_request.exec
+    todo
+    {sql|
+        UPDATE todos
+        SET
+          description = $2,
+          status = $3,
+          created_at = $4,
+          updated_at = $5
+        WHERE todos.uuid = $1::uuid
+        |sql}
+;;
+{% endif %}
 
 let update todo =
   Sihl.Database.query (fun connection ->

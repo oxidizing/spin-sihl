@@ -35,9 +35,14 @@ install: all ## Install the packages on the system
 sihl: all ## Run the produced executable
 	opam exec -- dune exec --root . run/run.exe $(ARGS)
 
+.PHONY: test_unit
+test-unit: ## Run the unit tests
+	opam exec -- dune runtest
+
 .PHONY: test
-test: ## Run the unit tests
-	opam exec -- dune --root . runtest
+test: ## Run the all tests
+	opam exec -- dune build --root . @runtest
+	opam exec -- dune build --root . @runtest-all
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
@@ -58,3 +63,13 @@ watch: ## Watch for the filesystem and rebuild on every change
 .PHONY: utop
 utop: ## Run a REPL and link with the project's libraries
 	opam exec -- dune utop --root . lib -- -implicit-bindings
+
+{% if docker == 'Yes' %}
+.PHONY: db
+db: ## Starts the database using docker-compose
+	docker-compose -f docker/docker-compose.dev.yml up -d
+
+.PHONY: db_down
+db_down: ## Removes the database using docker-compose
+	docker-compose -f docker/docker-compose.dev.yml down
+{% endif %}
