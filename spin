@@ -87,5 +87,5 @@
     ("make test" "Starts the test runner.")
     ("make sihl" "Runs the app executable and lists available sub-commands.")
     ("make sihl migrate" "Executes database migrations.")
-    ("make sihl start" "Starts the Sihl app"))
+    ("make dev" "Starts the Sihl app in watch mode"))
   (enabled_if true))

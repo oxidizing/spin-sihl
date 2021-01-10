@@ -56,9 +56,28 @@ doc: ## Generate odoc documentation
 format: ## Format the codebase with ocamlformat
 	opam exec -- dune build --root . --auto-promote @fmt
 
-.PHONY: watch
-watch: ## Watch for the filesystem and rebuild on every change
-	opam exec -- dune build --root . --watch
+.PHONE dev:
+.SILENT:
+.ONESHELL:
+dev:    ## Run the Sihl app, watch files and restart on change
+	sigint_handler()
+	{
+	[[ $$(jobs -pr) = "" ]] || kill $$(jobs -pr)
+	exit
+	}
+	trap sigint_handler SIGINT
+	while true; do
+	dune build
+	if [ $$? -eq 0 ]
+	then
+		SIHL_ENV=development ./_build/default/run/run.exe start &
+		PID=$$!
+	fi
+	echo
+	inotifywait -e modify -e move -e create -e delete -e attrib -r `pwd` --exclude "(_build|logs|Makefile)" -qq
+	[[ $$(jobs -pr) = "" ]] || kill $$(jobs -pr)
+	echo
+	done
 
 .PHONY: utop
 utop: ## Run a REPL and link with the project's libraries
