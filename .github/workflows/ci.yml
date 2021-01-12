@@ -36,6 +36,6 @@ jobs:
         if: steps.cache-opam.outputs.cache-hit == 'true'
         run: opam upgrade --fixup
       - name: Generate project with default config
-        run: spin new -d . demo
+        run: opam exec -- spin new -d . demo
       - name: Build project
         run: make build
