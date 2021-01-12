@@ -1,0 +1,41 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        ocaml-version:
+          - 4.11.1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Retrieve opam cache
+        uses: actions/cache@v2
+        if: runner.os != 'Windows'
+        id: cache-opam
+        with:
+          path: ~/.opam
+          key: v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}
+          restore-keys: |
+            v2-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -y
+          opam install spin dune
+      - name: Recover from an Opam broken state
+        if: steps.cache-opam.outputs.cache-hit == 'true'
+        run: opam upgrade --fixup
+      - name: Generate project with default config
+        run: spin new -d . demo
+      - name: Build project
+        run: make build
