@@ -4,7 +4,7 @@ let sanity_check () =
   Alcotest.(check int "is same" expected actual)
 ;;
 
-let suite = Alcotest.[ "canary test", [ test_case "sanity check" `Quick sanity_check ] ]
+let suite = Alcotest.[ "canary test", [ test_case "2 + 3 = 5" `Quick sanity_check ] ]
 
 let () =
   Unix.putenv "SIHL_ENV" "test";

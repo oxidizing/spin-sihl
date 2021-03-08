@@ -3,7 +3,7 @@
 
 (config project_name
   (input (prompt "Project name"))
-  (default "demo"))
+  (default "app"))
 
 (config project_slug
   (input (prompt "Project slug"))

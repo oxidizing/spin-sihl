@@ -42,7 +42,6 @@ test-unit: ## Run the unit tests
 .PHONY: test
 test: ## Run the all tests
 	opam exec -- dune build --root . @runtest
-	opam exec -- dune build --root . @runtest-all
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
