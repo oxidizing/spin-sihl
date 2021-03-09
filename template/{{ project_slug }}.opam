@@ -13,7 +13,16 @@ bug-reports: "https://github.com/{{ github_username }}/{{ project_slug }}/issues
 depends: [
   "ocaml" {>= "4.08.0"}
   "dune" {>= "2.0"}
+  "sihl" {= "0.3.0~rc2"}
+  "tyxml-ppx" {>= "4.4.0"}
+  {%- if database == 'PostgreSql' %}
+  "caqti-driver-postgresql" {>= "1.2.1"}
+  {%- endif %}
+  {%- if database == 'MariaDb' %}
+  "caqti-driver-mariadb" {>= "1.2.1"}
+  {%- endif %}
   "alcotest" {with-test}
+  "alcotest-lwt" {with-test}
   "odoc" {with-doc}
 ]
 build: [

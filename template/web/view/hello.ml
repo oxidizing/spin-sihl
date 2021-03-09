@@ -12,7 +12,9 @@ let%html page =
       <title>Hello world!</title>
   </head>
   <body>
-    <img class="logo" alt="Sihl Logo" src="/assets/logo.png">
+    <div class="container">
+      <h1 class="hello">Hello world!</h1>
+    </div>
   </body>
 </html>
 |}

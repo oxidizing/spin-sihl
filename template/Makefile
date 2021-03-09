@@ -33,15 +33,15 @@ install: all ## Install the packages on the system
 
 .PHONY: sihl
 sihl: all ## Run the produced executable
-	opam exec -- dune exec --root . run/run.exe $(ARGS)
+	SIHL_ENV=development opam exec -- dune exec --root . run/run.exe $(ARGS)
 
 .PHONY: test_unit
 test-unit: ## Run the unit tests
-	opam exec -- dune runtest
+	SIHL_ENV=test opam exec -- dune runtest
 
 .PHONY: test
 test: ## Run the all tests
-	opam exec -- dune build --root . @runtest
+	SIHL_ENV=test opam exec -- dune build --root . @runtest
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files

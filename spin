@@ -16,6 +16,9 @@
   (default (snake_case :project_slug)))
 
 (config create_switch
+  (select
+    (prompt "Do you want to create a local switch? (Do you want to install OPAM packages locally?")
+    (values Yes No))
   (default false))
 
 (config project_description
@@ -36,7 +39,7 @@
   (select
     (prompt "Which database do yo use?")
     (values PostgreSql MariaDb))
-  (default MariaDb))
+  (default PostgreSql))
 
 (config ci_cd
   (select
@@ -70,7 +73,7 @@
     (run make build)
     (run make lock))
   (message "🎁  Installing packages in a switch. This might take a couple minutes.")
-  (enabled_if (eq :create_switch true)))
+  (enabled_if (eq :create_switch Yes)))
 
 (post_gen
   (actions
@@ -78,7 +81,7 @@
     (run make build)
     (run make lock))
   (message "🎁  Installing packages globally. This might take a couple minutes.")
-  (enabled_if (eq :create_switch false)))
+  (enabled_if (eq :create_switch No)))
 
 (example_commands
   (commands

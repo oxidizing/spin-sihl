@@ -21,5 +21,5 @@ let services =
 
 let () =
   Sihl.App.(
-    empty |> with_services services |> run ~commands:[ Command.Add_todo.run ])
+    empty |> with_services services |> run ~commands:[])
 ;;

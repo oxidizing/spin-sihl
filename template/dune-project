@@ -26,8 +26,8 @@
  (depends
   (ocaml (>= 4.08.0))
   dune
-  (sihl
-   (= 0.3.0))
+  (sihl (= 0.3.0~rc2))
+  (tyxml-ppx (>= 4.4.0))
   {%- if database == 'PostgreSql' %}
   (caqti-driver-postgresql
    (>= 1.2.1))
@@ -36,5 +36,5 @@
   (caqti-driver-mariadb
    (>= 1.2.1))
   {%- endif %}
-  (alcotest :with-test)
+  (alcotest-lwt :with-test)
   (odoc :with-doc)))
