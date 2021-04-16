@@ -35,9 +35,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Write spin config
         uses: "finnp/create-file-action@master"
-          env:
-            FILE_NAME: "default"
-            FILE_DATA: "(username CI) (email ci@oxidizing) (github_username ci) (npm_username ci)"
+        env:
+          FILE_NAME: "default"
+          FILE_DATA: "(username CI) (email ci@oxidizing) (github_username ci) (npm_username ci)"
       - name: Generate project
         run: SPIN_CACHE_DIR=. SPIN_CONFIG_DIR=. spin new -d . test
       - name: Build project dependencies
