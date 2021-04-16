@@ -54,10 +54,11 @@ jobs:
       - name: Update opam repository
         if: steps.cache-opam.outputs.cache-hit != 'true'
         run: opam update
-      - name: Install spin
-        run: opam install spin
       - name: Generate project
-        run: SPIN_CACHE_DIR=. SPIN_CONFIG_DIR=. spin new -d . test
+        run: |
+          opam install spin -y
+          eval $(opam env)
+          SPIN_CACHE_DIR=. SPIN_CONFIG_DIR=. spin new -d . test
       - name: Build project dependencies
         run: make deps
       - name: Build project
