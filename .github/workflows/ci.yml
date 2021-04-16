@@ -59,12 +59,19 @@ jobs:
           opam install spin -y
           eval $(opam env)
           SPIN_CACHE_DIR=. SPIN_CONFIG_DIR=. spin new -d . test
-      - name: Build project dependencies
-        run: make deps
+      - name: Install project dependencies
+        if: steps.cache-opam.outputs.cache-hit != 'true'
+        run: |
+          cd test
+          make deps
       - name: Build project
-        run: make build
+        run: |
+          cd test
+          make build
       - name: Test project
-        run: make test
+        run: |
+          cd test
+          make test
 
       # - name: Retrieve opam cache
       #   uses: actions/cache@v2
