@@ -38,6 +38,12 @@ jobs:
         env:
           FILE_NAME: "default"
           FILE_DATA: "(username CI) (email ci@oxidizing) (github_username ci) (npm_username ci)"
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+      - name: Update opam repository
+        run: opam update
       - name: Install spin
         run: opam install spin
       - name: Generate project
