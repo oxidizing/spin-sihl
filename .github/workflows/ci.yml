@@ -33,6 +33,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Retrieve opam cache
+        uses: actions/cache@v2
+        if: runner.os != 'Windows'
+        id: cache-opam
+        with:
+          path: template/dune-project
+          key: v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-${{ hashFiles('*.opam.locked') }}
+          restore-keys: |
+            v2-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-
       - name: Write spin config
         uses: "finnp/create-file-action@master"
         env:
@@ -43,6 +52,7 @@ jobs:
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
       - name: Update opam repository
+        if: steps.cache-opam.outputs.cache-hit != 'true'
         run: opam update
       - name: Install spin
         run: opam install spin
