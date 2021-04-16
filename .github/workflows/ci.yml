@@ -38,8 +38,8 @@ jobs:
         if: runner.os != 'Windows'
         id: cache-opam
         with:
-          path: template/dune-project
-          key: v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-${{ hashFiles('*.opam.locked') }}
+          path: ~/.opam
+          key: v1-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-${{ hashFiles('template/dune-project') }}
           restore-keys: |
             v2-${{ runner.os }}-opam-${{ matrix.ocaml-version }}-
       - name: Write spin config
