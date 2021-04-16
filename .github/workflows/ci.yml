@@ -38,6 +38,8 @@ jobs:
         env:
           FILE_NAME: "default"
           FILE_DATA: "(username CI) (email ci@oxidizing) (github_username ci) (npm_username ci)"
+      - name: Install spin
+        run: opam install spin
       - name: Generate project
         run: SPIN_CACHE_DIR=. SPIN_CONFIG_DIR=. spin new -d . test
       - name: Build project dependencies
